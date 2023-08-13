@@ -7,17 +7,36 @@ body {
 }
 </style>
 
-<h1>Counter</h1>
+<h1>Burger Per Hour calculator</h1>
 
-<p>Current count: @currentCount</p>
+<input type="text" @bind="@givenInput" />
 
-<button @onclick="IncrementCount">Click me</button>
+<p>@output</p>
+
+<button @onclick="RecalcFromWatts">Watts to burger/hour</button>
+<button @onclick="RecalcFromHP">Horsepowers to burger/hour</button>
 
 @code {
-    private int currentCount = 0;
+    private string givenInput = "";
+    private string output = "";
 
-    private void IncrementCount()
+    private void Recalc(float watts)
     {
-        currentCount++;
+        var caloriesPerSecond = watts / 4.184;
+        var caloriesPerHour = caloriesPerSecond * 3600;
+        var kCalPerHour = caloriesPerHour / 1000;
+        // average cheeseburger from https://www.test.de/Burger-McDonalds-ist-der-Burger-King-1234826-1234906/
+        var burgerPerHour = kCalPerHour / 300;
+        output = $"{burgerPerHour} burger/hour";
+    }
+
+    private void RecalcFromWatts()
+    {
+        Recalc(float.Parse(givenInput));
+    }
+
+    private void RecalcFromHP()
+    {
+        Recalc(float.Parse(givenInput) * 745.7);
     }
 }
